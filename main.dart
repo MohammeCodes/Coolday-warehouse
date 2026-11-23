@@ -832,8 +832,7 @@ class CoolDayApp extends StatelessWidget {
         brightness: Brightness.dark,
         colorSchemeSeed: const Color(0xFFD32F2F),
         scaffoldBackgroundColor: const Color(0xFF121212),
-        cardTheme: const CardThemeData(elevation: 2, margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12)),: const CardTheme(elevation: 2, margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12)),
-      ),
+        cardTheme: const CardThemeData(elevation: 2, margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12)),
       home: const SplashScreen(),
     );
   }
