@@ -1,45 +1,42 @@
-name: Build APK
+name: Build Android APK
 
 on:
-  workflow_dispatch:
   push:
-    branches: [main]
-    paths:
-      - main.dart
-      - .github/workflows/build.yml
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
 
     steps:
-      - name: Get code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: 'zulu'
           java-version: '17'
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          channel: 'stable'
           cache: true
 
-      - name: Create Android project and add main.dart
-        run: | flutter create --platforms=android --org com.coolday --project-name cool_day_store app cp main.dart app/lib/main.dart cd app flutter pub add http intl 
-      - name: Android settings (internet permission + app name)
-        run: | MANIFEST=app/android/app/src/main/AndroidManifest.xml grep -q "android.permission.INTERNET" "$MANIFEST" || \ perl -0pi -e 's/(<manifest[^>]*>)/$1\n <uses-permission android:name="android.permission.INTERNET"\/>/' "$MANIFEST" sed -i 's/android:label="[^"]*"/android:label="Cool Day Store"/' "$MANIFEST" grep -n "INTERNET\|android:label" "$MANIFEST" 
-      - name: Check code (does not stop the build)
-        run: | cd app flutter analyze --no-fatal-infos --no-fatal-warnings || true 
-      - name: Build APK
-        run: | cd app flutter build apk --release 
-      - name: Save APK
+      - name: Scaffold and Build Flutter APK
+        run: |
+          flutter create --org com.coolday --project-name stock_dispatch_app app_scaffold
+          cp main.dart app_scaffold/lib/main.dart
+          cd app_scaffold
+          sed -i '/<application/i <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label="[^"]*"/android:label="Cool Day Store"/' android/app/src/main/AndroidManifest.xml
+          flutter pub add http intl
+          flutter build apk --release --no-tree-shake-icons
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: cool-day-apk-${{ github.run_number }}
-          path: app/build/app/outputs/flutter-apk/app-release.apk
-          retention-days: 30
+          name: Cool-Day-Store-Order-${{ github.run_number }}
+          path: app_scaffold/build/app/outputs/flutter-apk/app-release.apk
