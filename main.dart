@@ -1,4 +1,4 @@
-// Cool Day Ethiopia - Warehouse Dispatch & Sales Order + Store Stock Card
+no// Cool Day Ethiopia - Warehouse Dispatch & Sales Order + Store Stock Card
 // Single-file Flutter application with animated splash screen, bilingual support, and Firebase sync.
 //
 // Dependencies in pubspec.yaml:
@@ -836,7 +836,7 @@ class CoolDayApp extends StatelessWidget {
       ),
       home: const SplashScreen(),
     );
-    
+  }
 }
 
 // ============================================================================
