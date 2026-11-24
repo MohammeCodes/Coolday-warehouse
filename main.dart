@@ -466,7 +466,6 @@ List<StockItem> defaultStock() => [
 // ============================================================================
 // FIREBASE REST API
 // ============================================================================
-
 class Api {
   static const Map<String, String> _h = {'Content-Type': 'application/json'};
   static const Duration _t = Duration(seconds: 15);
